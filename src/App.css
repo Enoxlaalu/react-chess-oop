@@ -1,0 +1,94 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+#root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  justify-content: center;
+  grid-column-gap: 24px;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+}
+
+.cell img {
+  width: 50px;
+}
+
+.white {
+  background-color: brown;
+}
+
+.black {
+  background-color: orange;
+}
+
+.selected {
+  background-color: greenyellow;
+}
+
+.available {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: cyan;
+}
+
+.attacked {
+  background-color: cyan;
+}
+
+.lostFigures {
+  padding: 24px;
+}
+
+.lostBlack {
+  background-color: #fff;
+  color: #000;
+}
+
+.lostWhite {
+  background-color: #000;
+  color: #fff;
+}
+
+.figuresArray {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.figuresArray img {
+  width: 20px;
+  height: 20px;
+}
+
+.figure {
+  display: flex;
+  font-size: 12px;
+  align-items: center;  
+  flex-direction: column;
+  gap: 8px;
+}
