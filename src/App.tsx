@@ -68,6 +68,7 @@ function App() {
                 changePlayer={changePlayer}
                 onCheckmate={handleCheckmate}
                 onStalemate={handleStalemate}
+                resetKey={resetKey}
             />
             <div>
                 <LostFigures

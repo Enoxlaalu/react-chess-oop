@@ -12,6 +12,7 @@ interface IBoardComponent {
     changePlayer: () => void
     onCheckmate: (loserColor: Colors) => void
     onStalemate: () => void
+    resetKey: number
 }
 
 const BoardComponent: React.FC<IBoardComponent> = ({
@@ -21,15 +22,16 @@ const BoardComponent: React.FC<IBoardComponent> = ({
     changePlayer,
     onCheckmate,
     onStalemate,
+    resetKey,
 }) => {
     const [selectedCell, setSelectedCell] = useState<Cell | null>(null)
     const [isCheck, setIsCheck] = useState(false)
 
-    // Сброс isCheck и выделения при новой игре (board меняется на новый объект)
+    // Сброс isCheck и выделения при новой игре
     useEffect(() => {
         setIsCheck(false)
         setSelectedCell(null)
-    }, [board])
+    }, [resetKey])
 
     useEffect(() => {
         showAvailableMoves()
