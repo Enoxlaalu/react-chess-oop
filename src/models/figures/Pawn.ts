@@ -5,7 +5,7 @@ import blackLogo from '../../assets/black-pawn.png'
 import Cell from '../Cell'
 
 export default class Pawn extends Figure {
-    private isFirstStep = true
+    public isFirstStep = true
 
     constructor(color: Colors, cell: Cell) {
         super(color, cell)
@@ -16,13 +16,11 @@ export default class Pawn extends Figure {
 
     public canMove(target: Cell): boolean {
         if (!super.canMove(target)) return false
-        if (this.cell.x === target.x && this.cell.isEnemy(target)) return false
 
-        const step = this.isFirstStep ? 2 : 1
-
-        const black = this.cell.figure?.color === Colors.BLACK
+        const black = this.color === Colors.BLACK
         const direction = black ? 1 : -1
 
+        // Diagonal capture
         if (
             target.y === this.cell.y + direction &&
             (target.x === this.cell.x - 1 || target.x === this.cell.x + 1) &&
@@ -31,22 +29,29 @@ export default class Pawn extends Figure {
             return true
         }
 
+        // Forward moves only along the same column
         if (this.cell.x !== target.x) return false
 
-        if (black) {
-            if (target.y - this.cell.y > step || target.y - this.cell.y < 0)
-                return false
-        } else {
-            if (this.cell.y - target.y > step || this.cell.y - target.y < 0)
-                return false
+        // Cannot move forward onto any occupied square
+        if (!target.isEmpty()) return false
+
+        // One square forward
+        if (target.y === this.cell.y + direction) return true
+
+        // Two squares forward on first move — path must be clear
+        if (
+            this.isFirstStep &&
+            target.y === this.cell.y + direction * 2 &&
+            this.cell.isEmptyVertical(target)
+        ) {
+            return true
         }
 
-        return true
+        return false
     }
 
     public makeMove(target: Cell): void {
         super.makeMove(target)
-
         this.isFirstStep = false
     }
 }

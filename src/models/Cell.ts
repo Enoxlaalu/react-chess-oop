@@ -1,6 +1,7 @@
 import Board from './Board'
 import { Colors } from './Colors'
-import Figure from './figures/Figure'
+import Figure, { FigureNames } from './figures/Figure'
+import Queen from './figures/Queen'
 
 export default class Cell {
     readonly x: number
@@ -46,6 +47,18 @@ export default class Cell {
 
             target.setFigure(this.figure)
             this.figure = null
+
+            // Pawn promotion: auto-promote to Queen on back rank
+            const promotedPawn = target.figure
+            if (
+                promotedPawn &&
+                promotedPawn.name === FigureNames.PAWN &&
+                (target.y === 0 || target.y === 7)
+            ) {
+                const queen = new Queen(promotedPawn.color, target)
+                target.figure = queen
+                queen.cell = target
+            }
         }
     }
 

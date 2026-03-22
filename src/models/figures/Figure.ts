@@ -29,10 +29,12 @@ export default class Figure {
 
     canMove(cell: Cell): boolean {
         if (cell.figure?.color === this.color) return false
-        if (cell.figure?.name === FigureNames.KING) return false
         return true
     }
 
-    makeMove(cell: Cell): void {}
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    makeMove(_cell: Cell): void {
+        // override in subclasses
+    }
     // moveFigure(cell: Cell): void {}
 }

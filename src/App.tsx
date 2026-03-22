@@ -9,36 +9,65 @@ import Timer from './components/Timer'
 
 function App() {
     const [board, setBoard] = useState(new Board())
-    const [whitePLayer, setWhitePLayer] = useState(new Player(Colors.WHITE))
-    const [blackPLayer, setBlackPLayer] = useState(new Player(Colors.BLACK))
+    const [whitePlayer] = useState(new Player(Colors.WHITE))
+    const [blackPlayer] = useState(new Player(Colors.BLACK))
     const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null)
+    const [winner, setWinner] = useState<string | null>(null)
+    const [resetKey, setResetKey] = useState(0)
 
     useEffect(() => {
         startGame()
-        setCurrentPlayer(whitePLayer)
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     function changePlayer() {
-        setCurrentPlayer(
-            currentPlayer?.color === Colors.WHITE ? blackPLayer : whitePLayer
+        setCurrentPlayer((prev) =>
+            prev?.color === Colors.WHITE ? blackPlayer : whitePlayer
         )
     }
 
     function startGame() {
-        const board = new Board()
-        board.renderBoard()
-        board.addFigures()
-        setBoard(board)
+        const newBoard = new Board()
+        newBoard.renderBoard()
+        newBoard.addFigures()
+        setBoard(newBoard)
+        setWinner(null)
+        setCurrentPlayer(whitePlayer)
+        setResetKey((k) => k + 1)
+    }
+
+    function handleTimeout(loser: Colors) {
+        setWinner(loser === Colors.WHITE ? 'Black wins on time!' : 'White wins on time!')
+    }
+
+    function handleCheckmate(loserColor: Colors) {
+        setWinner(loserColor === Colors.WHITE ? 'Black wins by checkmate!' : 'White wins by checkmate!')
+    }
+
+    function handleStalemate() {
+        setWinner('Draw by stalemate!')
     }
 
     return (
         <div className="app">
-            <Timer currentPlayer={currentPlayer} restart={startGame} />
+            {winner && (
+                <div className="winner-banner">
+                    <h1>{winner}</h1>
+                    <button onClick={startGame}>New Game</button>
+                </div>
+            )}
+            <Timer
+                currentPlayer={winner ? null : currentPlayer}
+                restart={startGame}
+                onTimeout={handleTimeout}
+                resetKey={resetKey}
+            />
             <BoardComponent
                 board={board}
                 setBoard={setBoard}
-                currentPlayer={currentPlayer}
+                currentPlayer={winner ? null : currentPlayer}
                 changePlayer={changePlayer}
+                onCheckmate={handleCheckmate}
+                onStalemate={handleStalemate}
             />
             <div>
                 <LostFigures
